@@ -1,0 +1,255 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+}
+
+.app-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.app-header h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.app-header p {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.card-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    margin-bottom: 30px;
+}
+
+#cards-stack {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    transition: transform 0.1s ease;
+    user-select: none;
+}
+
+.card:active {
+    cursor: grabbing;
+}
+
+.card.animating {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+    padding: 20px;
+}
+
+.card-info h2 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+
+.card-info p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.card-badge {
+    position: absolute;
+    top: 50px;
+    padding: 10px 30px;
+    border: 4px solid;
+    border-radius: 10px;
+    font-size: 3rem;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    transform: rotate(-20deg);
+}
+
+.card-badge.like {
+    left: 50px;
+    color: #4ade80;
+    border-color: #4ade80;
+}
+
+.card-badge.dislike {
+    right: 50px;
+    color: #f87171;
+    border-color: #f87171;
+    transform: rotate(20deg);
+}
+
+.card-badge.visible {
+    opacity: 0.8;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.action-buttons button {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-buttons button:hover {
+    transform: scale(1.1);
+}
+
+.action-buttons button:active {
+    transform: scale(0.95);
+}
+
+.dislike-btn {
+    background: #f87171;
+}
+
+.like-btn {
+    background: #4ade80;
+}
+
+.action-buttons .icon {
+    font-size: 2rem;
+}
+
+.action-buttons .label {
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: white;
+    margin-top: 2px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.stat-label {
+    font-weight: 600;
+    color: #666;
+}
+
+#like-count,
+#dislike-count {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.no-more-cards {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.no-more-cards h2 {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.reset-button {
+    padding: 12px 30px;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+}
+
+.reset-button:hover {
+    transform: scale(1.05);
+}
+
+.reset-button:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 600px) {
+    .app-container {
+        padding: 20px;
+    }
+
+    .card-container {
+        height: 400px;
+    }
+
+    .action-buttons button {
+        width: 60px;
+        height: 60px;
+    }
+
+    .action-buttons .icon {
+        font-size: 1.5rem;
+    }
+}
