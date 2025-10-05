@@ -1,0 +1,17 @@
+{
+  "name": "muscle-matching",
+  "version": "1.0.0",
+  "description": "Tinder-like app for rating muscle photos",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch & npx http-server -p 3000",
+    "start": "npx http-server -p 3000"
+  },
+  "keywords": ["muscle", "rating", "tinder"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+}
