@@ -7,40 +7,232 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="app-container">
-        <header class="app-header">
-            <h1>💪 マッチョマッチング</h1>
-            <p>理想の体型を見つけよう</p>
-        </header>
+    <!-- ナビゲーション -->
+    <nav class="main-nav">
+        <button class="nav-btn active" data-screen="swipe">
+            <span class="nav-icon">💪</span>
+            <span>マッチング</span>
+        </button>
+        <button class="nav-btn" data-screen="messages">
+            <span class="nav-icon">💬</span>
+            <span>メッセージ</span>
+        </button>
+        <button class="nav-btn" data-screen="ranking">
+            <span class="nav-icon">🏆</span>
+            <span>ランキング</span>
+        </button>
+        <button class="nav-btn" data-screen="profile">
+            <span class="nav-icon">👤</span>
+            <span>プロフィール</span>
+        </button>
+    </nav>
 
-        <main class="card-container">
-            <div id="cards-stack"></div>
+    <!-- スワイプ画面 -->
+    <div class="screen active" id="swipe-screen">
+        <div class="app-container">
+            <header class="app-header">
+                <h1>💪 マッチョマッチング</h1>
+                <p>理想の体型を見つけよう</p>
+            </header>
 
-            <div class="no-more-cards" style="display: none;">
-                <h2>すべてのカードを評価しました！</h2>
-                <button id="reset-btn" class="reset-button">もう一度</button>
+            <main class="card-container">
+                <div id="cards-stack"></div>
+
+                <div class="no-more-cards" style="display: none;">
+                    <h2>すべてのカードを評価しました！</h2>
+                    <button id="reset-btn" class="reset-button">もう一度</button>
+                </div>
+            </main>
+
+            <div class="action-buttons">
+                <button class="dislike-btn" id="dislike-btn">
+                    <span class="icon">👎</span>
+                    <span class="label">NOPE</span>
+                </button>
+                <button class="undo-btn" id="undo-btn">
+                    <span class="icon">↩️</span>
+                    <span class="label">戻る</span>
+                </button>
+                <button class="like-btn" id="like-btn">
+                    <span class="icon">👍</span>
+                    <span class="label">LIKE</span>
+                </button>
             </div>
-        </main>
 
-        <div class="action-buttons">
-            <button class="dislike-btn" id="dislike-btn">
-                <span class="icon">👎</span>
-                <span class="label">NOPE</span>
-            </button>
-            <button class="like-btn" id="like-btn">
-                <span class="icon">👍</span>
-                <span class="label">LIKE</span>
-            </button>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">👍 Likes:</span>
+                    <span id="like-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">👎 Nopes:</span>
+                    <span id="dislike-count">0</span>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="stats">
-            <div class="stat-item">
-                <span class="stat-label">👍 Likes:</span>
-                <span id="like-count">0</span>
+    <!-- メッセージ画面 -->
+    <div class="screen" id="messages-screen">
+        <div class="app-container">
+            <header class="app-header">
+                <h1>💬 メッセージ</h1>
+                <p>マッチした相手とチャット</p>
+            </header>
+
+            <div class="matches-list" id="matches-list">
+                <!-- マッチリストがここに表示される -->
             </div>
-            <div class="stat-item">
-                <span class="stat-label">👎 Nopes:</span>
-                <span id="dislike-count">0</span>
+
+            <!-- チャット画面（マッチをクリックすると表示） -->
+            <div class="chat-container" id="chat-container" style="display: none;">
+                <div class="chat-header">
+                    <button class="back-btn" id="back-to-matches">←</button>
+                    <div class="chat-user-info">
+                        <img class="chat-avatar" id="chat-avatar" src="" alt="">
+                        <div>
+                            <h3 id="chat-user-name"></h3>
+                            <p id="chat-user-gym"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <!-- メッセージがここに表示される -->
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="chat-input" placeholder="メッセージを入力...">
+                    <button id="send-btn">送信</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ランキング画面 -->
+    <div class="screen" id="ranking-screen">
+        <div class="app-container">
+            <header class="app-header">
+                <h1>🏆 筋肉ランキング</h1>
+                <p>人気の体型をチェック</p>
+            </header>
+
+            <div class="ranking-tabs">
+                <button class="ranking-tab active" data-gender="male">男性目線</button>
+                <button class="ranking-tab" data-gender="female">女性目線</button>
+            </div>
+
+            <div class="ranking-list" id="ranking-list">
+                <!-- ランキングがここに表示される -->
+            </div>
+        </div>
+    </div>
+
+    <!-- プロフィール画面 -->
+    <div class="screen" id="profile-screen">
+        <div class="app-container">
+            <header class="app-header">
+                <h1>👤 プロフィール</h1>
+                <p>あなたの情報を設定</p>
+            </header>
+
+            <div class="profile-container">
+                <div class="profile-preview">
+                    <div class="profile-photo-wrapper">
+                        <img id="profile-preview-img" src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop" alt="プロフィール写真">
+                        <button class="photo-upload-btn" id="photo-upload-btn">
+                            📷 写真を変更
+                        </button>
+                        <input type="file" id="photo-input" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+
+                <form class="profile-form" id="profile-form">
+                    <div class="form-group">
+                        <label for="profile-name">名前 *</label>
+                        <input type="text" id="profile-name" placeholder="例: 太郎" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-age">年齢 *</label>
+                        <input type="number" id="profile-age" placeholder="例: 28" min="18" max="99" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-gender">性別 *</label>
+                        <select id="profile-gender" required>
+                            <option value="">選択してください</option>
+                            <option value="male">男性</option>
+                            <option value="female">女性</option>
+                            <option value="other">その他</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-gym">通っているジム *</label>
+                        <input type="text" id="profile-gym" placeholder="例: ゴールドジム 渋谷" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-purpose">マッチングの目的 *</label>
+                        <select id="profile-purpose" required>
+                            <option value="">選択してください</option>
+                            <option value="合トレ仲間を探したい">合トレ仲間を探したい</option>
+                            <option value="トレーニング仲間募集">トレーニング仲間募集</option>
+                            <option value="マッチング">マッチング</option>
+                            <option value="合トレパートナー探し">合トレパートナー探し</option>
+                            <option value="筋トレ友達を作りたい">筋トレ友達を作りたい</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-bio">自己紹介</label>
+                        <textarea id="profile-bio" rows="4" placeholder="あなたの筋トレ歴や目標などを書いてください..."></textarea>
+                    </div>
+
+                    <div class="profile-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">🏋️</div>
+                            <div class="stat-info">
+                                <div class="stat-value">3年</div>
+                                <div class="stat-label">トレーニング歴</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💪</div>
+                            <div class="stat-info">
+                                <div class="stat-value">週5回</div>
+                                <div class="stat-label">トレーニング頻度</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="save-profile-btn">
+                        💾 プロフィールを保存
+                    </button>
+                </form>
+
+                <div class="profile-actions">
+                    <button class="action-link" id="view-my-profile">
+                        👁️ プロフィールプレビュー
+                    </button>
+                    <button class="action-link danger" id="logout-btn">
+                        🚪 ログアウト
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- マッチ成功モーダル -->
+    <div class="modal" id="match-modal">
+        <div class="modal-content">
+            <h2>🎉 マッチしました！</h2>
+            <div class="match-users">
+                <img class="match-avatar" id="match-avatar" src="" alt="">
+            </div>
+            <p id="match-name"></p>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" id="keep-swiping">スワイプを続ける</button>
+                <button class="modal-btn primary" id="send-message">メッセージを送る</button>
             </div>
         </div>
     </div>
