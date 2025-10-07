@@ -32,6 +32,12 @@ interface Profile {
   imageUrl: string;
 }
 
+interface CheerMessage {
+  userId: number;
+  message: string;
+  timestamp: Date;
+}
+
 // サンプルユーザーデータ
 const users: User[] = [
   {
@@ -95,6 +101,7 @@ class MuscleMatchingApp {
   private currentChatUser: User | null = null;
   private messages: Map<number, Message[]> = new Map();
   private myProfile: Profile | null = null;
+  private cheerMessages: CheerMessage[] = [];
 
   // スワイプ関連
   private isDragging: boolean = false;
@@ -116,6 +123,8 @@ class MuscleMatchingApp {
     this.initializeMatches();
     this.loadProfile();
     this.setupProfileHandlers();
+    this.setupCheerMessageHandlers();
+    this.loadCheerMessages();
   }
 
   // ナビゲーション
@@ -762,6 +771,158 @@ class MuscleMatchingApp {
     `;
 
     document.body.appendChild(modal);
+  }
+
+  // 応援メッセージ機能
+  private setupCheerMessageHandlers(): void {
+    const cheerInput = document.getElementById('cheer-message-input') as HTMLTextAreaElement;
+    const sendCheerBtn = document.getElementById('send-cheer-btn');
+    const charCount = document.getElementById('cheer-char-count');
+    const viewCheerMessagesBtn = document.getElementById('view-cheer-messages');
+    const backToProfileBtn = document.getElementById('back-to-profile');
+
+    // 文字数カウント
+    cheerInput?.addEventListener('input', () => {
+      if (charCount) {
+        charCount.textContent = cheerInput.value.length.toString();
+      }
+    });
+
+    // 応援メッセージ送信
+    sendCheerBtn?.addEventListener('click', () => {
+      this.sendCheerMessage();
+    });
+
+    // 応援メッセージ一覧を表示
+    viewCheerMessagesBtn?.addEventListener('click', () => {
+      this.showCheerMessages();
+    });
+
+    // プロフィールに戻る
+    backToProfileBtn?.addEventListener('click', () => {
+      this.hideCheerMessages();
+    });
+  }
+
+  private sendCheerMessage(): void {
+    const cheerInput = document.getElementById('cheer-message-input') as HTMLTextAreaElement;
+    if (!cheerInput) return;
+
+    const message = cheerInput.value.trim();
+    if (message === '') {
+      alert('メッセージを入力してください');
+      return;
+    }
+
+    // 現在表示中のユーザーID
+    const currentUser = this.users[this.currentIndex];
+    if (!currentUser) return;
+
+    const cheerMessage: CheerMessage = {
+      userId: currentUser.id,
+      message: message,
+      timestamp: new Date()
+    };
+
+    this.cheerMessages.push(cheerMessage);
+    this.saveCheerMessages();
+
+    cheerInput.value = '';
+    const charCount = document.getElementById('cheer-char-count');
+    if (charCount) charCount.textContent = '0';
+
+    alert('応援メッセージを送信しました！');
+  }
+
+  private showCheerMessages(): void {
+    const profileContainer = document.querySelector('.profile-container') as HTMLElement;
+    const cheerMessagesContainer = document.getElementById('cheer-messages-container');
+
+    if (profileContainer && cheerMessagesContainer) {
+      profileContainer.style.display = 'none';
+      cheerMessagesContainer.style.display = 'block';
+    }
+
+    this.renderCheerMessages();
+  }
+
+  private hideCheerMessages(): void {
+    const profileContainer = document.querySelector('.profile-container') as HTMLElement;
+    const cheerMessagesContainer = document.getElementById('cheer-messages-container');
+
+    if (profileContainer && cheerMessagesContainer) {
+      profileContainer.style.display = 'block';
+      cheerMessagesContainer.style.display = 'none';
+    }
+  }
+
+  private renderCheerMessages(): void {
+    const cheerMessagesList = document.getElementById('cheer-messages-list');
+    const cheerMessagesTotal = document.getElementById('cheer-messages-total');
+
+    if (!cheerMessagesList) return;
+
+    // 自分のプロフィールIDに紐づくメッセージを取得（仮で全メッセージを表示）
+    const myMessages = this.cheerMessages;
+
+    if (cheerMessagesTotal) {
+      cheerMessagesTotal.textContent = myMessages.length.toString();
+    }
+
+    cheerMessagesList.innerHTML = '';
+
+    if (myMessages.length === 0) {
+      cheerMessagesList.innerHTML = `
+        <div class="no-cheer-messages">
+          <div class="icon">📣</div>
+          <p>まだ応援メッセージがありません</p>
+        </div>
+      `;
+      return;
+    }
+
+    // 新しいメッセージから順に表示
+    myMessages.reverse().forEach(msg => {
+      const messageItem = document.createElement('div');
+      messageItem.className = 'cheer-message-item';
+
+      const timeString = this.formatTime(msg.timestamp);
+
+      messageItem.innerHTML = `
+        <div class="cheer-message-content">${msg.message}</div>
+        <div class="cheer-message-meta">
+          <span class="cheer-message-anonymous">👤 匿名ユーザー</span>
+          <span class="cheer-message-time">${timeString}</span>
+        </div>
+      `;
+
+      cheerMessagesList.appendChild(messageItem);
+    });
+  }
+
+  private formatTime(date: Date): string {
+    const now = new Date();
+    const diff = now.getTime() - new Date(date).getTime();
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (minutes < 1) return 'たった今';
+    if (minutes < 60) return `${minutes}分前`;
+    if (hours < 24) return `${hours}時間前`;
+    if (days < 7) return `${days}日前`;
+    return new Date(date).toLocaleDateString('ja-JP');
+  }
+
+  private saveCheerMessages(): void {
+    localStorage.setItem('muscleMatchingCheerMessages', JSON.stringify(this.cheerMessages));
+  }
+
+  private loadCheerMessages(): void {
+    const saved = localStorage.getItem('muscleMatchingCheerMessages');
+    if (saved) {
+      this.cheerMessages = JSON.parse(saved);
+    }
   }
 }
 

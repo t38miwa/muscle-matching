@@ -44,6 +44,21 @@
                 </div>
             </main>
 
+            <!-- 応援メッセージ入力欄 -->
+            <div class="cheer-message-section">
+                <div class="cheer-message-header">
+                    <span class="cheer-icon">📣</span>
+                    <span>応援メッセージを送る（匿名）</span>
+                </div>
+                <div class="cheer-message-input-wrapper">
+                    <textarea id="cheer-message-input" placeholder="この人を応援するメッセージを書こう！（匿名で送信されます）" maxlength="200"></textarea>
+                    <div class="cheer-message-footer">
+                        <span class="char-count"><span id="cheer-char-count">0</span>/200</span>
+                        <button id="send-cheer-btn" class="send-cheer-btn">📣 送信</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="action-buttons">
                 <button class="dislike-btn" id="dislike-btn">
                     <span class="icon">👎</span>
@@ -214,9 +229,26 @@
                     <button class="action-link" id="view-my-profile">
                         👁️ プロフィールプレビュー
                     </button>
+                    <button class="action-link" id="view-cheer-messages">
+                        📣 応援メッセージを見る
+                    </button>
                     <button class="action-link danger" id="logout-btn">
                         🚪 ログアウト
                     </button>
+                </div>
+            </div>
+
+            <!-- 応援メッセージ一覧表示 -->
+            <div class="cheer-messages-container" id="cheer-messages-container" style="display: none;">
+                <div class="cheer-messages-header">
+                    <button class="back-btn" id="back-to-profile">←</button>
+                    <h2>📣 あなたへの応援メッセージ</h2>
+                </div>
+                <div class="cheer-messages-count">
+                    <span id="cheer-messages-total">0</span>件のメッセージ
+                </div>
+                <div class="cheer-messages-list" id="cheer-messages-list">
+                    <!-- 応援メッセージがここに表示される -->
                 </div>
             </div>
         </div>

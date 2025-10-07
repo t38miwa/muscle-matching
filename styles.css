@@ -872,6 +872,171 @@ body {
     background: #fef2f2;
 }
 
+/* 応援メッセージ入力欄（スワイプ画面） */
+.cheer-message-section {
+    background: #fff9e6;
+    border: 2px solid #fbbf24;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.cheer-message-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+}
+
+.cheer-icon {
+    font-size: 1.5rem;
+}
+
+.cheer-message-input-wrapper textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    border: 2px solid #fbbf24;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.cheer-message-input-wrapper textarea:focus {
+    border-color: #f59e0b;
+}
+
+.cheer-message-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.char-count {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.send-cheer-btn {
+    padding: 10px 20px;
+    background: #fbbf24;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.send-cheer-btn:hover {
+    background: #f59e0b;
+    transform: translateY(-2px);
+}
+
+.send-cheer-btn:active {
+    transform: translateY(0);
+}
+
+/* 応援メッセージ一覧表示（プロフィール画面） */
+.cheer-messages-container {
+    padding: 20px;
+}
+
+.cheer-messages-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+}
+
+.cheer-messages-header h2 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.cheer-messages-count {
+    text-align: center;
+    padding: 15px;
+    background: #fff9e6;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f59e0b;
+}
+
+.cheer-messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.cheer-message-item {
+    background: white;
+    border: 2px solid #fbbf24;
+    border-radius: 12px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.cheer-message-item:hover {
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
+    transform: translateY(-2px);
+}
+
+.cheer-message-content {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.cheer-message-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.cheer-message-anonymous {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cheer-message-time {
+    color: #999;
+}
+
+.no-cheer-messages {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.no-cheer-messages .icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.no-cheer-messages p {
+    font-size: 1.1rem;
+}
+
 /* レスポンシブ */
 @media (max-width: 600px) {
     body {
