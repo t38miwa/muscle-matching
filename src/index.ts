@@ -102,6 +102,7 @@ class MuscleMatchingApp {
   private messages: Map<number, Message[]> = new Map();
   private myProfile: Profile | null = null;
   private cheerMessages: CheerMessage[] = [];
+  private isLoggedIn: boolean = false;
 
   // スワイプ関連
   private isDragging: boolean = false;
@@ -117,6 +118,8 @@ class MuscleMatchingApp {
   }
 
   private init(): void {
+    this.checkLoginStatus();
+    this.setupLoginHandlers();
     this.setupNavigation();
     this.renderCards();
     this.attachEventListeners();
@@ -125,6 +128,113 @@ class MuscleMatchingApp {
     this.setupProfileHandlers();
     this.setupCheerMessageHandlers();
     this.loadCheerMessages();
+  }
+
+  // ログイン・ログアウト機能
+  private checkLoginStatus(): void {
+    const loginStatus = localStorage.getItem('muscleMatchingLoggedIn');
+    this.isLoggedIn = loginStatus === 'true';
+
+    const loginScreen = document.getElementById('login-screen');
+    const mainNav = document.querySelector('.main-nav') as HTMLElement;
+    const screens = document.querySelectorAll('.screen');
+
+    if (this.isLoggedIn) {
+      // ログイン済み: ログイン画面を非表示、メイン画面を表示
+      if (loginScreen) loginScreen.classList.add('hidden');
+      if (mainNav) mainNav.style.display = 'flex';
+      screens.forEach(screen => {
+        (screen as HTMLElement).style.display = '';
+      });
+    } else {
+      // 未ログイン: ログイン画面のみ表示
+      if (loginScreen) loginScreen.classList.remove('hidden');
+      if (mainNav) mainNav.style.display = 'none';
+      screens.forEach(screen => {
+        (screen as HTMLElement).style.display = 'none';
+      });
+    }
+  }
+
+  private setupLoginHandlers(): void {
+    const loginForm = document.getElementById('login-form') as HTMLFormElement;
+    const signupBtn = document.getElementById('signup-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // ログインフォーム送信
+    loginForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.handleLogin();
+    });
+
+    // 新規登録ボタン（とりあえずログインと同じ処理）
+    signupBtn?.addEventListener('click', () => {
+      this.handleSignup();
+    });
+
+    // ログアウトボタン
+    logoutBtn?.addEventListener('click', () => {
+      this.handleLogout();
+    });
+  }
+
+  private handleLogin(): void {
+    const emailInput = document.getElementById('login-email') as HTMLInputElement;
+    const passwordInput = document.getElementById('login-password') as HTMLInputElement;
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (email === '' || password === '') {
+      alert('メールアドレスとパスワードを入力してください');
+      return;
+    }
+
+    // バックエンドがないので、フロントエンドのみでログイン処理
+    localStorage.setItem('muscleMatchingLoggedIn', 'true');
+    localStorage.setItem('muscleMatchingUserEmail', email);
+    this.isLoggedIn = true;
+
+    // フォームをリセット
+    emailInput.value = '';
+    passwordInput.value = '';
+
+    // 画面を切り替え
+    this.checkLoginStatus();
+    alert('ログインしました！');
+  }
+
+  private handleSignup(): void {
+    // 新規登録処理（バックエンドがないので簡易実装）
+    const email = prompt('登録するメールアドレスを入力してください:');
+    if (!email) return;
+
+    const password = prompt('パスワードを入力してください:');
+    if (!password) return;
+
+    // LocalStorageに保存
+    localStorage.setItem('muscleMatchingLoggedIn', 'true');
+    localStorage.setItem('muscleMatchingUserEmail', email);
+    this.isLoggedIn = true;
+
+    // 画面を切り替え
+    this.checkLoginStatus();
+    alert('新規登録が完了しました！');
+  }
+
+  private handleLogout(): void {
+    if (confirm('ログアウトしますか？')) {
+      localStorage.removeItem('muscleMatchingLoggedIn');
+      localStorage.removeItem('muscleMatchingUserEmail');
+      this.isLoggedIn = false;
+
+      // プロフィールフォームをクリア
+      this.clearProfileForm();
+
+      // 画面を切り替え
+      this.checkLoginStatus();
+      alert('ログアウトしました');
+    }
   }
 
   // ナビゲーション
@@ -633,7 +743,6 @@ class MuscleMatchingApp {
     const photoInput = document.getElementById('photo-input') as HTMLInputElement;
     const previewImg = document.getElementById('profile-preview-img') as HTMLImageElement;
     const viewProfileBtn = document.getElementById('view-my-profile');
-    const logoutBtn = document.getElementById('logout-btn');
 
     // 写真アップロードボタン
     photoUploadBtn?.addEventListener('click', () => {
@@ -664,16 +773,6 @@ class MuscleMatchingApp {
     // プロフィールプレビュー
     viewProfileBtn?.addEventListener('click', () => {
       this.showProfilePreview();
-    });
-
-    // ログアウト
-    logoutBtn?.addEventListener('click', () => {
-      if (confirm('ログアウトしますか？')) {
-        localStorage.removeItem('muscleMatchingProfile');
-        this.myProfile = null;
-        alert('ログアウトしました');
-        this.clearProfileForm();
-      }
     });
   }
 
