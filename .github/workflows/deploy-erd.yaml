@@ -14,12 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Generate ER Diagrams
-        # You can specify a custom output directory with --output-dir option if needed
-        run: npx @liam-hq/cli erd build --input schema.sql --format postgres
+        run: npx @liam-hq/cli erd build --input schema.sql --format postgres --output ./dist
       - name: Deploy ERD to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy ./dist --project-name=lifti-db-erd
+          command: pages deploy ./dist --project-name=muscle-matching
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
